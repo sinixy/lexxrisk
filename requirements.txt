@@ -1,0 +1,4 @@
+python-dotenv==1.0.1
+aiogram==3.17.0
+aiosqlite==0.21.0
+gspread==6.1.4
