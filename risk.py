@@ -37,8 +37,8 @@ class RiskManager:
                 return sh
         raise KeyError(f'No such worksheet: {worksheet_title}')
 
+    @asyncify
     def get_max_risk(self, account_id: int) -> DailyRisk:
-        # asyncify
         for row in self._risk_worksheet.get(value_render_option=gspread.utils.ValueRenderOption.unformatted):
             if RiskConfig.ACCOUNT_COL >= len(row): continue
             if row[RiskConfig.ACCOUNT_COL] == account_id:
@@ -51,7 +51,7 @@ class RiskManager:
         raise KeyError(f'No such account: {account_id}')
     
     async def get_current_risk(self, account_id: int) -> DailyRisk:
-        return self.get_max_risk(account_id)
+        return await self.get_max_risk(account_id)
     
         async with aiohttp.ClientSession(headers=TakionConfig.HEADERS) as session:
             async with session.get(TakionConfig.BASE_URL + f'/{account_id}') as resp:

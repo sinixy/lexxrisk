@@ -108,7 +108,7 @@ async def change_risk_val(message: types.Message, user: User, state: FSMContext)
         await message.answer("Некорректное значение! Попробуйте ещё раз:", reply_markup=cancel_kb)
         return
 
-    max_risk = manager.get_max_risk(user.account_id)
+    max_risk = await manager.get_max_risk(user.account_id)
     current_risk = await manager.get_current_risk(user.account_id)
     state_name = await state.get_state()
     if state_name == Stop.input.state:
