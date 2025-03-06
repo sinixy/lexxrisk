@@ -6,6 +6,7 @@ from aiogram.filters import CommandStart
 from bot.models import User
 from bot.models.enums import Role
 from bot.keyboards.user import risk_menu, yes_no_kb, cancel_kb
+from common.logger import logger
 from risk import manager
 
 
@@ -85,7 +86,9 @@ async def change_fixer_step(message: types.Message, state: FSMContext):
 @router.callback_query(Fixer.confirm, F.data == "yes")
 async def confirm_fixer_change(callback: types.CallbackQuery, user: User, state: FSMContext):
     data = await state.get_data()
-    await manager.set_fixer(user.account_id, data['trigger'], data['step'])
+    trigger, step = data['trigger'], data['step']
+    logger.info(f"User(tg={user.tg_id}, takion={user.account_id}) requested to change fixer to trigger={trigger} and steap={step}")
+    await manager.set_fixer(user.account_id, trigger, step)
     await state.clear()
     await callback.message.delete()
     await callback.message.answer("Фиксер успешно установлен!")
@@ -135,8 +138,10 @@ async def confirm_risk_change(callback: types.CallbackQuery, user: User, state: 
 
     state_name = await state.get_state()
     if state_name == Stop.confirm.state:
+        logger.info(f"User(tg={user.tg_id}, takion={user.account_id}) requested to change stop to {data['stop']}")
         await manager.set_stop(user.account_id, data['stop'])
     elif state_name == Cover.confirm.state:
+        logger.info(f"User(tg={user.tg_id}, takion={user.account_id}) requested to change cover to {data['cover']}")
         await manager.set_cover(user.account_id, data['cover'])
     
     await state.clear()

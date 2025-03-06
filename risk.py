@@ -4,7 +4,7 @@ import gspread.utils
 from dataclasses import dataclass
 
 from config import TakionConfig, GSKEY_PATH, RiskConfig, FixerConfig
-from utils import asyncify
+from common.utils import asyncify
 
 
 @dataclass

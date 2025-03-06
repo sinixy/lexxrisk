@@ -1,14 +1,11 @@
 from aiogram import BaseMiddleware, types, Bot
 from aiogram.types import TelegramObject
 from typing import Callable, Dict, Any, Awaitable, Union
-import logging
 
 from bot.models import User
 from bot.models.enums import Role
+from common.logger import logger
 
-
-logger = logging.getLogger('bot')
-logging.basicConfig(filename='bot.log', level=logging.INFO)
 
 class GlobalMiddleware(BaseMiddleware):
 
