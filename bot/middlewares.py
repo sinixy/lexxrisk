@@ -5,6 +5,7 @@ from typing import Callable, Dict, Any, Awaitable, Union
 from bot.models import User
 from bot.models.enums import Role
 from common.logger import logger
+from risk import manager
 
 
 class GlobalMiddleware(BaseMiddleware):
@@ -28,6 +29,8 @@ class GlobalMiddleware(BaseMiddleware):
         data["user"] = user
         
         try:
+            if not data.get('takion'):
+                data['takion'] = await manager.get_takion_by_account(user.account_id)
             return await handler(event, data)
         except Exception as e:
             await bot.send_message(user_id, "Возникла ошибка в боте! Пожалуйста, сообщите к администратору.\n\n" + str(e))
